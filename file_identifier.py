@@ -10,32 +10,46 @@ FILE_SIGNATURES = {
 def main():
     while True:
         try:
-            option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. check a file\n3. exit\n"))
+            option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. Check a file\n3. exit\n"))
         except ValueError:
-            print("Invalid choose. Please try again")
+            print("Invalid choice. Please try again")
             continue
         if option == 1 or option == 2:
             path = input("Please Enter the path\n")
             if os.path.exists(path):
-                print("Path exist.")
-                handle_option(path, option)
+                if (option == 1 and os.path.isdir(path)) or (option == 2 and os.path.isfile(path)):
+                    handle_option(path, option)
+                else:
+                    print("Invalid path choice. Please try again")
             else:
                 print("Invalid path. Please try again")
         elif option == 3:
             exit()
         else:
-            print("Invalid choose. Please try again")
+            print("Invalid choice. Please try again")
 
 def handle_option(path, option):
     if option == 1:
-        files = os.listdir(path)
+        try:
+            files = os.listdir(path)
+        except PermissionError:
+            print(f"You don't have permission for {path}.\n")
+            return
         for file in files:
-            handle_file(f"{path}\\{file}")
+            full_path = os.path.join(path, file)
+            if os.path.isdir(full_path):
+                handle_option(full_path, 1)
+            else:
+                handle_file(full_path)
     else:
         handle_file(path)
 
 def handle_file(file_path):
-    first_bytes = get_bytes(file_path)
+    try:
+        first_bytes = get_bytes(file_path)
+    except PermissionError:
+        print(f"You don't have permission for {file_path}.\n")
+        return
     file_format = check_format(first_bytes)
     print(f"Path: {file_path}\nFormat: {file_format}\n")
 
