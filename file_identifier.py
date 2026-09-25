@@ -7,7 +7,10 @@ FILE_SIGNATURES = {
     "255044462D": "PDF"
 }
 
+bytes_to_read = 0
+
 def main():
+    calc_max_bytes()
     while True:
         try:
             option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. Check a file\n3. exit\n"))
@@ -28,6 +31,12 @@ def main():
         else:
             print("Invalid choice. Please try again")
 
+def calc_max_bytes():
+    global bytes_to_read
+    for signature, file_format in FILE_SIGNATURES.items():
+        if len(signature) // 2 > bytes_to_read:
+            bytes_to_read = len(signature) // 2
+        
 def handle_option(path, option):
     if option == 1:
         try:
@@ -55,7 +64,7 @@ def handle_file(file_path):
 
 def get_bytes(path):
     with open(path, 'rb') as file:
-        data = file.read(8)
+        data = file.read(bytes_to_read)
         first_bytes = data.hex().upper()
     return first_bytes
 
