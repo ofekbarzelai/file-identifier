@@ -12,24 +12,25 @@ bytes_to_read = 0
 def main():
     calc_max_bytes()
     while True:
+        print("Please choose an option from the menu\n1. Check files in a folder\n2. Check a file\n3. Exit")
         try:
-            option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. Check a file\n3. exit\n"))
+            option = int(input("Your option: "))
         except ValueError:
-            print("Invalid choice. Please try again")
+            print("Invalid choice. Please try again.")
             continue
         if option == 1 or option == 2:
-            path = input("Please Enter the path\n")
+            path = input("Please Enter the path:\n")
             if os.path.exists(path):
                 if (option == 1 and os.path.isdir(path)) or (option == 2 and os.path.isfile(path)):
                     handle_option(path, option)
                 else:
-                    print("Invalid path choice. Please try again")
+                    print("Invalid path choice. Please try again.")
             else:
-                print("Invalid path. Please try again")
+                print("Invalid path. Please try again.")
         elif option == 3:
             exit()
         else:
-            print("Invalid choice. Please try again")
+            print("Invalid choice. Please try again.")
 
 def calc_max_bytes():
     global bytes_to_read
