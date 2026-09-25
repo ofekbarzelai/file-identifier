@@ -1,6 +1,6 @@
 import os
 
-file_signatures = {
+FILE_SIGNATURES = {
     "4D5A": "PE",
     "89504E470D0A1A0A": "PNG",
     "FFD8FF": "JPG",
@@ -25,13 +25,14 @@ def handle_option(path, option):
     if option == 1:
         files = os.listdir(path)
         for file in files:
-            first_bytes = get_bytes(f"{path}\\{file}")
-            file_format = check_format(first_bytes)
-            print(f"Path: {path}\{file}\nFormat: {file_format}\n")
+            handle_file(f"{path}\\{file}")
     else:
-        first_bytes = get_bytes(path)
-        file_format = check_format(first_bytes)
-        print(f"Path: {path}\nFormat: {file_format}\n")
+        handle_file(path)
+
+def handle_file(file_path):
+    first_bytes = get_bytes(file_path)
+    file_format = check_format(first_bytes)
+    print(f"Path: {file_path}\nFormat: {file_format}\n")
 
 def get_bytes(path):
     with open(path, 'rb') as file:
@@ -40,7 +41,7 @@ def get_bytes(path):
     return first_bytes
 
 def check_format(first_bytes):
-    for signature, file_format in file_signatures.items():
+    for signature, file_format in FILE_SIGNATURES.items():
         if first_bytes.startswith(signature):
             return file_format
 
