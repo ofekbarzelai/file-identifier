@@ -9,15 +9,20 @@ FILE_SIGNATURES = {
 
 def main():
     while True:
-        option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. check a file\n"))
-        
+        try:
+            option = int(input("Please choose an option from the menu\n1. Check files in a folder\n2. check a file\n3. exit\n"))
+        except ValueError:
+            print("Invalid choose. Please try again")
+            continue
         if option == 1 or option == 2:
             path = input("Please Enter the path\n")
             if os.path.exists(path):
                 print("Path exist.")
                 handle_option(path, option)
-            print("Invalid path. Please try again")
-
+            else:
+                print("Invalid path. Please try again")
+        elif option == 3:
+            exit()
         else:
             print("Invalid choose. Please try again")
 
@@ -44,6 +49,7 @@ def check_format(first_bytes):
     for signature, file_format in FILE_SIGNATURES.items():
         if first_bytes.startswith(signature):
             return file_format
+    return "Unknown"
 
 if __name__ == "__main__":
     main()
